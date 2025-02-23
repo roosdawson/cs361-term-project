@@ -6,6 +6,7 @@ import os
 
 budget = 0.0
 spendings = 0.0
+spendings_history = []
 
 #function: introduction()
 #definition: greet user with an introduction statement, as well as get their name
@@ -99,17 +100,39 @@ def update_budget():
         return
 
 
+#function:   print_spendings_history()
+#definition: print all previous spendings
+def print_spendings_history():
+    
+    print(f"\nPrevious spendings:")
+    for spending in spendings_history:
+        print(f"${spending}")
+
+
+#function:   remove_spendings_history()
+#definition: remove purchase from spendings_history[]
+#parameters: rm_spending_amt
+def remove_spendings_history(rm_spending_amt):
+    while rm_spending_amt not in spendings_history:
+        choice = input("\nPlease enter a valid purchase amount. If not sure of previous purchases, enter 1. Else, press enter: ")
+        if choice != '':
+            print_spendings_history()
+        rm_spending_amt = float(input("\nEnter the purchase amount you want to remove from your spendings (in dollars): "))
+    spendings_history.remove(rm_spending_amt)
+    return rm_spending_amt
+
+
 #function:   remove_spending()
 #definition: remove from spendings
 def remove_spending():
     global spendings
     print(f"\nWARNING: All history of previous spending amounts will be deleted. Only remove if you are certain.")
-    rm_spending_amt = float(input("\nEnter the amount you want to remove from your spendings (in dollars): "))
-    while rm_spending_amt > spendings:
-        print(f"\nPlease enter an amount less than your current spendings ($", spendings, ")")
-        rm_spending_amt = float(input("\nEnter the amount you want to remove from your spendings (in dollars): "))
+    rm_spending_amt = float(input("\nEnter the purchase amount you want to remove from your spendings (in dollars): "))
+    rm_spending_amt = remove_spendings_history(rm_spending_amt)
     spendings -= rm_spending_amt
     print(f"\nYour new total spendings are $", spendings)
+    input("\nPress enter to go back to home page")
+
 
 
 #function:   add_spending()
@@ -121,7 +144,9 @@ def add_spending():
         print(f"Please enter a number greater than 0.\n")
         add_spending_amt = float(input("\nEnter the amount you want to add to your total spendings (in dollars): "))
     spendings += add_spending_amt
+    spendings_history.append(add_spending_amt)
     print(f"\nYour new total spendings are $", spendings)
+    input("\nPress enter to go back to home page.")
 
 
 #function:   update_spending_options()
@@ -159,7 +184,7 @@ def view_current_status():
     print(f"\nYour current budget is $", budget)
     print(f"Your current total spendings are $", spendings, "\n")
     if spendings > budget:
-        print(f"You are over budget by $\n", spendings - budget)
+        print(f"You are over budget by $", spendings - budget, "\n")
     elif spendings < budget:
         print(f"Congrats! You are under budget by $\n", budget - spendings)
     else:
@@ -177,12 +202,12 @@ def about_page():
     print(f"Author: Dawson Roos")
     print(f"Course: CS361")
     print(f"Assignment: Beaver Budgeting Software\n")
-    print(f"This program allows you to create your own budget, as well as input")
-    print(f"your spendings. It also provides secure login in order to save your")
-    print(f"budget and spendings information for future use (NOT IMPLEMENTED YET).\n")
+    print(f"This program allows you to create your own budget, as well as input your spendings.")
+    print(f"\nThere are currently 3 different main functionalities implemented:")
+    print(f" - Update budget / monthly income")
+    print(f" - Update expenses")
+    print(f" - View budget vs spendings")
     print(f"\nThis program utilizes python as the main programming language.")
-    print(f"MYSQL is used to store data about users for future use (NOT IMPLEMENTED YET).")
-    print(f"An API (not decided yet) is used to create a budget vs spendings graph (NOT IMPLEMENTED YET).")
     print(f"\n")
     input("\nPress enter to go back to home page.")
 
